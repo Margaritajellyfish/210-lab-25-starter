@@ -11,7 +11,7 @@ void load_data(const string &filename, vector<string> &vec);
 void load_data(const string &filename, list<string> &lst);
 void load_data(const string &filename, set<string> &st);
 
-template <typename name> long long readData(name &container) {
+template <typename name> long readData(name &container) {
   ifstream fin;
   fin.open("codes.txt");
   string line;
@@ -22,53 +22,61 @@ template <typename name> long long readData(name &container) {
   auto end = high_resolution_clock::now();
   fin.close();
 
-  return duration_cast<microseconds>(end - start).count();
+  return duration_cast<milliseconds>(end - start).count();
 }
-template <typename name> long long deleteData(name &container) {
+template <typename name> long deleteData(name &container) {
 
   auto start = high_resolution_clock::now();
   auto it = container.begin();
   advance(it, container.size() / 2);
   container.erase(it);
   auto end = high_resolution_clock::now();
-  return duration_cast<microseconds>(end - start).count();
+  return duration_cast<milliseconds>(end - start).count();
 }
+
+template <typename name> long insertData(name &container) {
+
+  auto start = high_resolution_clock::now();
+  auto it = container.begin();
+  advance(it, container.size() / 2);
+  container.insert(it, "TESTCODE");
+  auto end = high_resolution_clock::now();
+  return duration_cast<milliseconds>(end - start).count();
+}
+
+
+long sortData(vector<string> vec) {
+  auto start = high_resolution_clock::now();
+  sort(vec.begin(), vec.end());
+  auto end = high_resolution_clock::now();
+  return duration_cast<milliseconds>(end - start).count();
+}
+long sortData(list<string> lst) {
+  auto start = high_resolution_clock::now();
+  lst.sort();
+  auto end = high_resolution_clock::now();
+
+  return duration_cast<milliseconds>(end - start).count();
+}
+long sortData(set<string> st) { return -1; }
+
 
 int main() {
-    vector<string> vec;
-    list<string> lst;
-    set<string> st;
-
-    auto start = high_resolution_clock::now();
-    load_data("codes.txt", vec);
-    auto end = high_resolution_clock::now();
-    long long read_vector_time = duration_cast<microseconds>(end - start).count();
-
-    return 0;
-}
-
-void load_data(const string &filename, vector<string> &vec) {
-    ifstream file(filename);
-    string line;
-    while (getline(file, line)) {
-        vec.push_back(line);
-    }
-}
-
-void load_data(const string &filename,list<string> &lst) {
-    ifstream file(filename);
-    string line;
-    while (getline(file, line)) {
-        lst.push_back(line);
-    }
-}
-
-void load_data(const string &filename, set<string> &st) {
-    ifstream file(filename);
-    string line;
-    while (getline(file, line)) {
-        st.insert(line);
-    }
+  vector<string> vec;
+  list<string> lst;
+  set<string> st;
+  cout << left << setw(15) << "Operation" << setw(12) << "Vector" << setw(12)
+       << "List" << setw(12) << "Set" << endl;
+  cout << left << setw(15) << "Read" << setw(12) << readData(vec) << setw(12)
+       << readData(lst) << setw(12) << readData(st) << endl;
+  cout << left << setw(15) << "Sort" << setw(12) << sortData(vec) << setw(12)
+       << sortData(lst) << setw(12) << sortData(st) << endl;
+  cout << left << setw(15) << "Insert" << setw(12) << insertData(vec)
+       << setw(12) << insertData(lst) << setw(12) << insertData(st) << endl;
+  cout << left << setw(15) << "Delete" << setw(12) << deleteData(vec)
+       << setw(12) << deleteData(lst) << setw(12) << deleteData(st) << endl;
+  cout << "microseconds";
+return 0;
 }
 /* syntax examples:
 auto start = high_resolution_clock::now()
