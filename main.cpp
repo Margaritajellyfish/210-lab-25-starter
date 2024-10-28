@@ -11,11 +11,38 @@ void load_data(const string &filename, vector<string> &vec);
 void load_data(const string &filename, list<string> &lst);
 void load_data(const string &filename, set<string> &st);
 
-void display_results(const string &operation, long long vector_time, long long list_time, long long set_time);
+template <typename name> long long readData(name &container) {
+  ifstream fin;
+  fin.open("codes.txt");
+  string line;
+  auto start = high_resolution_clock::now();
+  while (getline(fin, line)) {
+    container.insert(container.end(), line);
+  }
+  auto end = high_resolution_clock::now();
+  fin.close();
+
+  return duration_cast<microseconds>(end - start).count();
+}
+template <typename name> long long deleteData(name &container) {
+
+  auto start = high_resolution_clock::now();
+  auto it = container.begin();
+  advance(it, container.size() / 2);
+  container.erase(it);
+  auto end = high_resolution_clock::now();
+  return duration_cast<microseconds>(end - start).count();
+}
+
 int main() {
     vector<string> vec;
     list<string> lst;
     set<string> st;
+
+    auto start = high_resolution_clock::now();
+    load_data("codes.txt", vec);
+    auto end = high_resolution_clock::now();
+    long long read_vector_time = duration_cast<microseconds>(end - start).count();
 
     return 0;
 }
